@@ -2,7 +2,7 @@ Go WASM packages.
 
 ---
 
-[![GoDoc](https://godoc.org/github.com/?status.svg)](https://godoc.org/github.com/apex/js)
+[![GoDoc](https://godoc.org/github.com/apex/js?status.svg)](https://godoc.org/github.com/apex/js)
 ![](https://img.shields.io/badge/license-MIT-blue.svg)
 ![](https://img.shields.io/badge/status-stable-green.svg)
 
