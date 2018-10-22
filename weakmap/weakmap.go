@@ -6,7 +6,7 @@ package weakmap
 
 import "syscall/js"
 
-// WeakMap is a collection of
+// WeakMap collection.
 type WeakMap struct {
 	v js.Value
 }
