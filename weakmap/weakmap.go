@@ -23,13 +23,13 @@ func (m *WeakMap) Set(key, value interface{}) {
 	m.v.Call("set", key, value)
 }
 
-// Get a key's value. Nil is returned if the key does not exist.
-func (m *WeakMap) Get(key interface{}) *js.Value {
-	v := m.v.Call("get", key)
+// Get a key's value. False is returned if the key does not exist.
+func (m *WeakMap) Get(key interface{}) (v js.Value, ok bool) {
+	v = m.v.Call("get", key)
 	if v == js.Undefined() {
-		return nil
+		return v, false
 	}
-	return &v
+	return v, true
 }
 
 // Delete a key's value.
