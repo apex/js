@@ -23,7 +23,7 @@ func Keys(o js.Value) (keys []string) {
 	return
 }
 
-// Entry is a single object entry.
+// Entry is a single key/value pair.
 type Entry struct {
 	Key string
 	js.Value
