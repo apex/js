@@ -44,7 +44,9 @@ func render(kind, tmpl string, values ...interface{}) Template {
 	return Template(res)
 }
 
-// parse template.
+// parse returns the sub-strings and arguments for use
+// in the calls to lit-html's html() and svg() functions,
+// letting us use $N to reference positional arguments.
 func parse(tmpl string, values []interface{}) (strings []interface{}, args []interface{}) {
 	re := regexp.New(`\$(\d+)`, "g")
 	var prevIndex int
