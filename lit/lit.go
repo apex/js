@@ -8,6 +8,7 @@ import (
 )
 
 // TODO: bundle lit-html?
+// TODO: implement caching in a less hacky way haha...
 
 // references.
 var (
@@ -44,10 +45,29 @@ func render(kind, tmpl string, values ...interface{}) Template {
 	return Template(res)
 }
 
+// cache entry.
+type cache struct {
+	strings    []interface{}
+	argIndexes []int
+}
+
+// caches is a set of cache entries.
+var caches = map[string]cache{}
+
 // parse returns the sub-strings and arguments for use
 // in the calls to lit-html's html() and svg() functions,
 // letting us use $N to reference positional arguments.
 func parse(tmpl string, values []interface{}) (strings []interface{}, args []interface{}) {
+primed:
+	c, ok := caches[tmpl]
+	if ok {
+		strings = c.strings
+		for _, i := range c.argIndexes {
+			args = append(args, values[i])
+		}
+		return
+	}
+
 	re := regexp.New(`\$(\d+)`, "g")
 	var prevIndex int
 
@@ -63,20 +83,21 @@ func parse(tmpl string, values []interface{}) (strings []interface{}, args []int
 
 		// positional arg
 		argIndex := parseInt.Invoke(m.Index(1)).Int()
-		arg := values[argIndex]
-		args = append(args, arg)
+		c.argIndexes = append(c.argIndexes, argIndex)
 
 		// substring
 		index := m.Get("index").Int()
 		str := tmpl[prevIndex:index]
-		strings = append(strings, str)
+		c.strings = append(c.strings, str)
 
 		prevIndex = index + len(match)
 	}
 
 	// substring
 	str := tmpl[prevIndex:]
-	strings = append(strings, str)
+	c.strings = append(c.strings, str)
 
-	return
+	// cache
+	caches[tmpl] = c
+	goto primed
 }
