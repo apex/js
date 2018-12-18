@@ -5,6 +5,8 @@ package lit
 
 import (
 	"syscall/js"
+
+	"github.com/apex/js/regexp"
 )
 
 // TODO: bundle lit-html?
@@ -13,7 +15,6 @@ import (
 // references.
 var (
 	lit      = js.Global().Get("lit")
-	regexp   = js.Global().Get("RegExp")
 	parseInt = js.Global().Get("parseInt")
 )
 
@@ -68,25 +69,24 @@ primed:
 		return
 	}
 
-	re := regexp.New(`\$(\d+)`, "g")
+	re := regexp.New(`\$(\d+)`, regexp.Global)
 	var prevIndex int
 
 	for {
-		m := re.Call("exec", tmpl)
-
-		if m == js.Null() {
+		m := re.Exec(tmpl)
+		if m == nil {
 			break
 		}
 
 		// matched string
-		match := m.Index(0).String()
+		match := m.String()
 
 		// positional arg
-		argIndex := parseInt.Invoke(m.Index(1)).Int()
+		argIndex := parseInt.Invoke(m.Match(0)).Int()
 		c.argIndexes = append(c.argIndexes, argIndex)
 
 		// substring
-		index := m.Get("index").Int()
+		index := m.Index()
 		str := tmpl[prevIndex:index]
 		c.strings = append(c.strings, str)
 
