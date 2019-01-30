@@ -41,3 +41,8 @@ func (m *WeakMap) Delete(key interface{}) {
 func (m *WeakMap) Has(key interface{}) bool {
 	return m.v.Call("has", key).Bool()
 }
+
+// JSValue implementation.
+func (r *RegExp) JSValue() js.Value {
+	return r.v
+}
