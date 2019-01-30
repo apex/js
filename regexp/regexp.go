@@ -112,3 +112,8 @@ func (r *RegExp) Exec(s string) *Result {
 func (r *RegExp) String() string {
 	return r.v.String()
 }
+
+// JSValue implementation.
+func (r *RegExp) JSValue() js.Value {
+	return r.v
+}
