@@ -25,8 +25,8 @@ func Keys(o js.Value) (keys []string) {
 
 // Entry is a single key/value pair.
 type Entry struct {
-	Key string
-	js.Value
+	Key   string
+	Value js.Value
 }
 
 // Entries returns the object entries as key/value pairs.
